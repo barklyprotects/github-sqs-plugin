@@ -51,9 +51,9 @@ public class SqsProfile extends AbstractDescribableImpl<SqsProfile> implements A
     }
 
     public AmazonSQS getSQSClient() {
-        if (client == null) {
-            client = new AmazonSQSClient(this);
-            if (urlSpecified) {
+        if(client == null) {
+            client =  new AmazonSQSClient(this);
+            if(urlSpecified) {
                 Matcher endpointMatcher = endpointPattern.matcher(getSqsQueue());
                 if (endpointMatcher.find()) {
                     String endpoint = endpointMatcher.group(1);
