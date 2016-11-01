@@ -52,7 +52,12 @@ public class SqsProfile extends AbstractDescribableImpl<SqsProfile> implements A
 
     public AmazonSQS getSQSClient() {
         if(client == null) {
-            client =  new AmazonSQSClient(this);
+            if (org.apache.commons.lang.StringUtils.isNotBlank(awsAccessKeyId)) &&
+                org.apache.commons.lang.StringUtils.isNotBlank(awsSecretAccessKey.getPlainText()) {
+                client =  new AmazonSQSClient(this);
+            } else {
+                client =  new AmazonSQSClient();
+            }
             if(urlSpecified) {
                 Matcher endpointMatcher = endpointPattern.matcher(getSqsQueue());
                 if (endpointMatcher.find()) {
