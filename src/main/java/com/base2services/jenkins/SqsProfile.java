@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 /**
  * SqsProfile to access SQS
  *
@@ -51,14 +53,13 @@ public class SqsProfile extends AbstractDescribableImpl<SqsProfile> implements A
     }
 
     public AmazonSQS getSQSClient() {
-        if(client == null) {
-            if (org.apache.commons.lang.StringUtils.isNotBlank(awsAccessKeyId)) &&
-                org.apache.commons.lang.StringUtils.isNotBlank(awsSecretAccessKey.getPlainText()) {
-                client =  new AmazonSQSClient(this);
+        if (client == null) {
+            if (isNotBlank(awsAccessKeyId) && isNotBlank(awsSecretAccessKey.getPlainText())) {
+                client = new AmazonSQSClient(this);
             } else {
-                client =  new AmazonSQSClient();
+                client = new AmazonSQSClient();
             }
-            if(urlSpecified) {
+            if (urlSpecified) {
                 Matcher endpointMatcher = endpointPattern.matcher(getSqsQueue());
                 if (endpointMatcher.find()) {
                     String endpoint = endpointMatcher.group(1);
